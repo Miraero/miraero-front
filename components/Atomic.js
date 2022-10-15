@@ -73,37 +73,3 @@ export const SmallWeek = styled.button`
   border-radius: 9px;
   border: 1px solid #f2f2f2;
 `;
-
-export const MiddleFill = styled.button`
-  width: 40%;
-  height: 51px;
-  font-weight: 500;
-  font-size: 18px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--white);
-  border-radius: 9px;
-  background-color: var(--textColor);
-  border: none;
-  &:hover {
-    background-color: var(--pressed);
-  }
-`;
-
-export const MiddleWeek = styled.button`
-  width: 40%;
-  height: 51px;
-  font-weight: 500;
-  font-size: 18px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--white);
-  border-radius: 9px;
-  background-color: var(--textColor);
-  border: none;
-  &:hover {
-    background-color: var(--pressed);
-  }
-`;
