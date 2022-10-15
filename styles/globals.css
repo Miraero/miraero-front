@@ -5,16 +5,27 @@ body {
     background-color: white;
     padding: 0;
     margin: 0;
+    width: 100%;
+    min-height: 100%;
     font-family: "Pretendard Variable", -apple-system, BlinkMacSystemFont,
         system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo",
         "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji",
         "Segoe UI Symbol", sans-serif;
 }
 
+body {
+    width: 100%;
+    min-height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 :root {
     --gray01: #7e7e7e;
     --gray02: #b3b3b3;
     --textColor: #2d2d2d;
+    --pressed: #1c1c1c;
     --boxShadow: 0px 2px 10px rgba(218, 223, 238, 0.58);
     --white: #ffffff;
 }
