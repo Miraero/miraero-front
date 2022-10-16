@@ -37,7 +37,19 @@ const Home = () => {
                     <Welcome>주륵님 안녕하세요!</Welcome>
                 </VerticalLeft>
                 <SectionTitle>받은 편지함</SectionTitle>
-                {letters.length > 0 ? (
+                {isLoading ? (
+                    <NoLetter>
+                        <img
+                            src="/asset/noletter.png"
+                            alt="편지 없음 이미지"
+                            width={140}
+                        />
+                        <br />
+                        로딩중이에요!
+                        <br />
+                        잠시만 기다려주세요...
+                    </NoLetter>
+                ) : letters.length > 0 ? (
                     <LetterView>
                         {letters.map((letter) => (
                             <LetterBox key={letter.id} letter={letter} />
@@ -45,6 +57,12 @@ const Home = () => {
                     </LetterView>
                 ) : (
                     <NoLetter>
+                        <img
+                            src="/asset/noletter.png"
+                            alt="편지 없음 이미지"
+                            width={140}
+                        />
+                        <br />
                         아직 날아온 편지가 없어요
                         <br />
                         자신에게 추억을 선물해주세요
