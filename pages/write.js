@@ -1,14 +1,17 @@
 import React, { useState } from "react";
 import Header from "../components/Header";
-import { DateText, SmallFill } from "../components/Atomic";
+import {
+  DateText,
+  SmallFill,
+  PageWrapper,
+  LargeButton,
+} from "../components/Atomic";
 import { Modal } from "../components/Modal";
 import styled from "@emotion/styled";
-
-const Wrapper = styled.div`
-  box-sizing: border-box;
-  width: calc(100vw - 40px);
-  min-height: 100vh;
-`;
+import { userDataState } from "../store/atom";
+import { useRecoilState } from "recoil";
+import client from "../lib/client";
+import { useRouter } from "next/router";
 
 const Contents = styled.div`
   margin-top: 102px;
@@ -51,9 +54,29 @@ const BtnContainer = styled.div`
   justify-content: space-between;
 `;
 
+const SecondStepHeader = styled.div`
+  font-size: 32px;
+  margin-bottom: 100px;
+`;
+
+const DateInput = styled.input`
+  width: 100%;
+  height: 50px;
+  border: none;
+  outline: none;
+  border-bottom: 1px solid var(--gray02);
+  font-size: 24px;
+  margin-bottom: 675px;
+  cursor: pointer;
+`;
+
 const Write = () => {
+  const router = useRouter();
   let [inputTitle, setInputTitle] = useState("");
   let [inputContent, setInputContent] = useState("");
+  let [inputDate, setInputDate] = useState("");
+
+  const [userData, setUserData] = useRecoilState(userDataState);
 
   const handleTitleInput = (e) => {
     setInputTitle(e.target.value);
@@ -61,33 +84,96 @@ const Write = () => {
   const handleContentInput = (e) => {
     setInputContent(e.target.value);
   };
+  const handleDateInput = (e) => {
+    setInputDate(e.target.value);
+  };
+
+  const handleNextStep = () => {
+    if (inputTitle === "" || inputContent === "") {
+      alert("모든 항목을 입력해주세요.");
+      return;
+    }
+    let temp = {
+      ...userData,
+      currentStep: true,
+    };
+    setUserData(temp);
+  };
+
+  const handleSubmit = () => {
+    if (inputDate === "") {
+      alert("모든 항목을 입력해주세요.");
+      return;
+    }
+
+    client
+      .post("/api/letter", {
+        title: inputTitle,
+        content: inputContent,
+        currentStep: userData.currentStep,
+        font: userData.font,
+        letterType: userData.letterType,
+        receiveDate: inputDate,
+      })
+      .then((res) => {
+        console.log(res);
+        router.push("/");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    console.log("submit");
+  };
 
   return (
-    <Wrapper>
+    <PageWrapper>
       <Header />
-      <Contents>
-        <WriteTop>
-          <DateText>2022.10.16</DateText>
 
-          <InputTitle
-            type="text"
-            onChange={handleTitleInput}
-            placeholder="제목을 입력해주세요"
-            value={inputTitle}
-          ></InputTitle>
-        </WriteTop>
+      {!userData.currentStep ? (
+        <>
+          <Contents>
+            <WriteTop>
+              <DateText>2022.10.16</DateText>
 
-        <InputContent
-          onChange={handleContentInput}
-          placeholder="당신의 이야기를 들려주세요"
-          value={inputContent}
-        ></InputContent>
-      </Contents>
-      <BtnContainer>
-        <Modal />
-        <SmallFill onClick={() => alert("짠")}>다음</SmallFill>
-      </BtnContainer>
-    </Wrapper>
+              <InputTitle
+                type="text"
+                onChange={handleTitleInput}
+                placeholder="제목을 입력해주세요"
+                value={inputTitle}
+              ></InputTitle>
+            </WriteTop>
+
+            <InputContent
+              onChange={handleContentInput}
+              placeholder="당신의 이야기를 들려주세요"
+              value={inputContent}
+            ></InputContent>
+          </Contents>
+          <BtnContainer>
+            <Modal title={inputTitle} content={inputContent} />
+            <SmallFill onClick={handleNextStep}>다음</SmallFill>
+          </BtnContainer>
+        </>
+      ) : (
+        <>
+          <Contents
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+            }}
+          >
+            <SecondStepHeader>받는 날짜 설정</SecondStepHeader>
+            <DateInput
+              type="date"
+              value={inputDate}
+              onChange={handleDateInput}
+            />
+            <LargeButton onClick={handleSubmit}>완료</LargeButton>
+          </Contents>
+        </>
+      )}
+    </PageWrapper>
   );
 };
 
