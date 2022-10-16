@@ -8,46 +8,17 @@ import {
 } from "../components/Atomic";
 import styled from "@emotion/styled";
 import LetterBox from "../components/LetterBox";
-import Header from "../components/Header";
+import { useQuery } from "@tanstack/react-query";
 
 const Home = () => {
-    const [letters, setLetters] = useState([
-        {
-            id: "1",
-            title: "아이스크림 먹는 캄토노",
-            to: "2022.10.10",
-            from: "2022.10.12",
-            isRead: true,
-        },
-        {
-            id: "2",
-            title: "40살 햄버거를 먹고 있는 YAM",
-            to: "2022.10.11",
-            from: "2022.10.14",
-            isRead: false,
-        },
-        {
-            id: "3",
-            title: "킨드의 킨더초콜릿 ",
-            to: "2022.10.14",
-            from: "2022.10.15",
-            isRead: false,
-        },
-        {
-            id: "3",
-            title: "킨드의 킨더초콜릿 ",
-            to: "2022.10.14",
-            from: "2022.10.15",
-            isRead: false,
-        },
-        {
-            id: "3",
-            title: "킨드의 킨더초콜릿 ",
-            to: "2022.10.14",
-            from: "2022.10.15",
-            isRead: false,
-        },
-    ]);
+    const getLetters = async () => {
+        const { data } = await client.get("/api/letters");
+        return data;
+    };
+
+    const { data: letters, isLoading } = useQuery(["letters"], getLetters, {
+        refetchInterval: 500,
+    });
 
     return (
         <PageWrapper
