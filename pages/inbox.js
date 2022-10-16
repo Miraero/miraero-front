@@ -2,6 +2,7 @@ import styled from "@emotion/styled";
 import { useRouter } from "next/router";
 import Header from "../components/Header";
 import { useQuery } from "@tanstack/react-query";
+import client from "../lib/client";
 
 const Inbox = () => {
     const router = useRouter();
