@@ -37,6 +37,7 @@ const DateText = styled.div`
 const LetterTitle = styled.div`
     margin: 5px 0;
     font-size: 24px;
+    font-weight: 600;
 `;
 
 const LetterView = styled.div`
