@@ -1,18 +1,21 @@
 import styled from "@emotion/styled";
 
-const LetterBox = () => {
+const LetterBox = ({ letter }) => {
+  const { title, to, from, isRead } = letter;
+  const url = isRead ? "asset/openletter.png" : "asset/letter.png";
+
   return (
     <LetterContainer>
-      <LetterImage src="asset/letter.png" />
+      <LetterImage src={url} />
       <LetterInfo>
-        <LetterTitle>아이스크림 먹는 캄토노</LetterTitle>
+        <LetterTitle>{title}</LetterTitle>
         <LetterToSection>
           <LetterToTitle>To</LetterToTitle>
-          <LetterToDate>2022.10.16</LetterToDate>
+          <LetterToDate>{to}</LetterToDate>
         </LetterToSection>
         <LetterFromSection>
           <LetterFromTitle>From</LetterFromTitle>
-          <LetterFromDate>2022.10.18</LetterFromDate>
+          <LetterFromDate>{from}</LetterFromDate>
         </LetterFromSection>
       </LetterInfo>
     </LetterContainer>
