@@ -9,6 +9,7 @@ import {
 import styled from "@emotion/styled";
 import LetterBox from "../components/LetterBox";
 import { useQuery } from "@tanstack/react-query";
+import client from "../lib/client";
 
 const Home = () => {
     const getLetters = async () => {
