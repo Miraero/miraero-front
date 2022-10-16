@@ -1,16 +1,30 @@
 import styled from "@emotion/styled";
+import { useRouter } from "next/router";
 import Header from "../components/Header";
+import { useQuery } from "@tanstack/react-query";
 
 const Inbox = () => {
+    const router = useRouter();
+
+    const getLetter = async () => {
+        const { data } = await client.get(
+            `/api/letter/${router.query.letterId}`
+        );
+        return data;
+    };
+
+    const { data: letter } = useQuery(["letter"], getLetter, {
+        refetchInterval: 500,
+    });
     return (
         <MainWrapper>
-            <Header></Header>
+            <Header />
             <Main>
                 <MainTop>
-                    <DateText>2022.10.03</DateText>
-                    <LetterTitle>1년 뒤 내모습!</LetterTitle>
+                    <DateText>{data.receiveDate}</DateText>
+                    <LetterTitle>{data.title}</LetterTitle>
                 </MainTop>
-                <LetterView>어쩌구</LetterView>
+                <LetterView>{data.content}</LetterView>
             </Main>
         </MainWrapper>
     );
