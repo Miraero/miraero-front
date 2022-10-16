@@ -22,7 +22,6 @@ const letter_DATA = [
 export const ModalContainer = styled.div`
   display: flex;
   flex-direction: column;
-  justifycontent: "space-between";
   height: auto;
 `;
 

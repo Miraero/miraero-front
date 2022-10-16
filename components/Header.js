@@ -5,12 +5,12 @@ const Header = () => {
   const router = useRouter();
   const handleClick = (e) => {
     e.preventDefault();
-    router.path === "write" ? "편지 쓰기" : router.push("/");
+    router.asPath === "/write" ? "편지 쓰기" : router.push("/");
   };
   return (
     <Container>
       <ArrowButton src="asset/icon.png" onClick={handleClick} />
-      {router.path === "write" ? "편지 쓰기" : "편지 보기"}
+      {router.asPath === "/write" ? "편지 쓰기" : "편지 보기"}
       <VerticalRight></VerticalRight>
     </Container>
   );
