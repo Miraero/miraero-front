@@ -1,14 +1,24 @@
 import styled from '@emotion/styled'
+import React, { useState, useEffect } from 'react'
 
 const Inbox = () => {
+  const [letter, setLetter] = useState({})
+  const { letterSendDate, letterTitle, letterText } = letter
+
+  useEffect(() => {
+    fetch('/data/letterList.json')
+      .then(res => res.json())
+      .then(data => setLetter(data.letter))
+  })
+
   return (
     <MainWrapper>
       <Main>
         <MainTop>
-          <DateText>2022.10.03</DateText>
-          <LetterTitle>1년 뒤 내모습!</LetterTitle>
+          <DateText>{letterSendDate}</DateText>
+          <LetterTitle>{letterTitle}</LetterTitle>
         </MainTop>
-        <LetterView>어쩌구</LetterView>
+        <LetterView>{letterText}</LetterView>
       </Main>
     </MainWrapper>
   )
