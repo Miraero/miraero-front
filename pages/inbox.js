@@ -1,8 +1,10 @@
 import styled from "@emotion/styled";
+import Header from "../components/Header";
 
 const Inbox = () => {
     return (
         <MainWrapper>
+            <Header></Header>
             <Main>
                 <MainTop>
                     <DateText>2022.10.03</DateText>
