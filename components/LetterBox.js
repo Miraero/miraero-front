@@ -9,7 +9,7 @@ const LetterBox = ({ letter }) => {
     const handleClick = (e, id) => {
         e.preventDefault();
         router.push({
-            pathname: "inbox",
+            pathname: "letterview",
             query: {
                 letterId: `${id}`,
             },

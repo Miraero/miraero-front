@@ -5,7 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import client from "../lib/client";
 import { useEffect } from "react";
 
-const Inbox = () => {
+const LetterView = () => {
     const router = useRouter();
 
     useEffect(() => {
@@ -45,7 +45,7 @@ const Inbox = () => {
     );
 };
 
-export default Inbox;
+export default LetterView;
 
 const MainWrapper = styled.div`
     box-sizing: border-box;
