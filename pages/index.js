@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
     PageWrapper,
     VerticalLeft,
@@ -10,16 +10,33 @@ import styled from "@emotion/styled";
 import LetterBox from "../components/LetterBox";
 import { useQuery } from "@tanstack/react-query";
 import client from "../lib/client";
+import { useRouter } from "next/router";
 
 const Home = () => {
-    const getLetters = async () => {
-        const { data } = await client.get("/api/letters");
-        return data;
+    const router = useRouter();
+
+    const [name, setName] = useState("");
+    useEffect(() => {
+        if (!localStorage.getItem("accessToken")) {
+            router.push("/login");
+        }
+        client.defaults.headers[
+            "Authorization"
+        ] = `Bearer ${localStorage.getItem("accessToken")}`;
+        setName(localStorage.getItem("name"));
+    }, []);
+
+    const handleWrite = (e) => {
+        e.preventDefault();
+        router.push("/write");
     };
 
-    const { data: letters, isLoading } = useQuery(["letters"], getLetters, {
-        refetchInterval: 500,
-    });
+    const getLetters = async () => {
+        const { data } = await client.get("/api/letters");
+        return data.letters;
+    };
+
+    const { data: letters, isLoading } = useQuery(["letters"], getLetters, {});
 
     return (
         <PageWrapper
@@ -35,7 +52,7 @@ const Home = () => {
                     }}
                 >
                     <DateText>2022.10.03</DateText>
-                    <Welcome>주륵님 안녕하세요!</Welcome>
+                    <Welcome>{name}님 안녕하세요.</Welcome>
                 </VerticalLeft>
                 <SectionTitle>받은 편지함</SectionTitle>
                 {isLoading ? (
@@ -71,7 +88,9 @@ const Home = () => {
                 )}
             </PageTop>
             <PageEnd>
-                <LargeButton>편지 쓰기</LargeButton>
+                <LargeButton onClick={(e) => handleWrite(e)}>
+                    편지 쓰기
+                </LargeButton>
                 <div
                     style={{
                         height: "30px",
