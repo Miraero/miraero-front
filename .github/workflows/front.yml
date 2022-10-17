@@ -11,6 +11,11 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
+      - name: make .env
+        run: |
+          touch .env
+          echo ${{ secrets.NEXT_PUBLIC_API_URI }} >> .env
+      
       - name: 'Checkout Github Action'
         uses: actions/checkout@main
 
