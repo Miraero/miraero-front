@@ -32,6 +32,7 @@ jobs:
           login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
           username: ${{ secrets.REGISTRY_USERNAME }}
           password: ${{ secrets.REGISTRY_PASSWORD }}
+          NEXT_PUBLIC_API_URI: NEXT_PUBLIC_API_URI=${{ secrets.NEXT_PUBLIC_API_URI }}
       - run: |
           docker build . -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/samplefront:${{ github.sha }}
           docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/samplefront:${{ github.sha }}
