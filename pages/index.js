@@ -12,9 +12,13 @@ import { useQuery } from "@tanstack/react-query";
 import client from "../lib/client";
 import { useRouter } from "next/router";
 import HeadMeta from "../components/HeadMeta";
+import { userDataState } from "../store/atom";
+import { useRecoilState } from "recoil";
 
 const Home = () => {
-  const router = useRouter();
+    const [userData, setUserData] = useRecoilState(userDataState);
+    const date = new Date();
+    const router = useRouter();
 
   const [name, setName] = useState("");
   useEffect(() => {
@@ -27,10 +31,16 @@ const Home = () => {
     setName(localStorage.getItem("name"));
   }, []);
 
-  const handleWrite = (e) => {
-    e.preventDefault();
-    router.push("/write");
-  };
+
+    const handleWrite = (e) => {
+        e.preventDefault();
+        let temp = {
+            ...userData,
+            currentStep: false,
+        };
+        setUserData(temp);
+        router.push("/write");
+    };
 
   const getLetters = async () => {
     const { data } = await client.get("/api/letters");
@@ -46,61 +56,67 @@ const Home = () => {
         style={{
           justifyContent: "space-between",
         }}
-      >
-        <PageTop>
-          <VerticalLeft
-            style={{
-              marginTop: "101px",
-              gap: "3px",
-            }}
-          >
-            <DateText>2022.10.03</DateText>
-            <Welcome>{name}님 안녕하세요.</Welcome>
-          </VerticalLeft>
-          <SectionTitle>받은 편지함</SectionTitle>
-          {isLoading ? (
-            <NoLetter>
-              <img
-                src="/asset/noletter.png"
-                alt="편지 없음 이미지"
-                width={140}
-              />
-              <br />
-              로딩중이에요!
-              <br />
-              잠시만 기다려주세요...
-            </NoLetter>
-          ) : letters.length > 0 ? (
-            <LetterView>
-              {letters.map((letter) => (
-                <LetterBox key={letter.id} letter={letter} />
-              ))}
-            </LetterView>
-          ) : (
-            <NoLetter>
-              <img
-                src="/asset/noletter.png"
-                alt="편지 없음 이미지"
-                width={140}
-              />
-              <br />
-              아직 날아온 편지가 없어요
-              <br />
-              자신에게 추억을 선물해주세요
-            </NoLetter>
-          )}
-        </PageTop>
-        <PageEnd>
-          <LargeButton onClick={(e) => handleWrite(e)}>편지 쓰기</LargeButton>
-          <div
-            style={{
-              height: "30px",
-            }}
-          ></div>
-        </PageEnd>
-      </PageWrapper>
-    </>
-  );
+ 
+        >
+            <PageTop>
+                <VerticalLeft
+                    style={{
+                        marginTop: "101px",
+                        gap: "3px",
+                    }}
+                >
+                    <DateText>
+                        {" "}
+                        {date.getFullYear()}.{date.getMonth() + 1}.
+                        {date.getDate()}
+                    </DateText>
+                    <Welcome>{name}님 안녕하세요.</Welcome>
+                </VerticalLeft>
+                <SectionTitle>받은 편지함</SectionTitle>
+                {isLoading ? (
+                    <NoLetter>
+                        <img
+                            src="/asset/noletter.png"
+                            alt="편지 없음 이미지"
+                            width={140}
+                        />
+                        <br />
+                        로딩중이에요!
+                        <br />
+                        잠시만 기다려주세요...
+                    </NoLetter>
+                ) : letters.length > 0 ? (
+                    <LetterView>
+                        {letters.map((letter) => (
+                            <LetterBox key={letter.id} letter={letter} />
+                        ))}
+                    </LetterView>
+                ) : (
+                    <NoLetter>
+                        <img
+                            src="/asset/noletter.png"
+                            alt="편지 없음 이미지"
+                            width={140}
+                        />
+                        <br />
+                        아직 날아온 편지가 없어요
+                        <br />
+                        자신에게 추억을 선물해주세요
+                    </NoLetter>
+                )}
+            </PageTop>
+            <PageEnd>
+                <LargeButton onClick={(e) => handleWrite(e)}>
+                    편지 쓰기
+                </LargeButton>
+                <div
+                    style={{
+                        height: "30px",
+                    }}
+                ></div>
+            </PageEnd>
+        </PageWrapper>
+    );
 };
 
 const PageEnd = styled.div`

@@ -23,30 +23,30 @@ const LetterPage = () => {
     return data;
   };
 
-  const { data, isLoading } = useQuery(["letter"], getLetter, {});
-  return (
-    <>
-      <HeadMeta title="받은편지함" />
-      <MainWrapper>
-        <Header />
-        <Main>
-          {isLoading ? (
-            <div>로딩중</div>
-          ) : (
-            <>
-              <MainTop>
-                <DateText>
-                  {data.receiveDatecreatedAt.slice(0, 10).replace(/-/g, ".")}
-                </DateText>
-                <LetterTitle>{data.title}</LetterTitle>
-              </MainTop>
-              <LetterView>{data.content}</LetterView>
-            </>
-          )}
-        </Main>
-      </MainWrapper>
-    </>
-  );
+
+    const { data, isLoading } = useQuery(["letter"], getLetter, {});
+    return (
+        <MainWrapper>
+            <Header />
+            <Main>
+                {isLoading ? (
+                    <div>로딩중</div>
+                ) : (
+                    <>
+                        <MainTop>
+                            <DateText>
+                                {data.receiveDate
+                                    .slice(0, 10)
+                                    .replace(/-/g, ".")}
+                            </DateText>
+                            <LetterTitle>{data.title}</LetterTitle>
+                        </MainTop>
+                        <LetterView>{data.content}</LetterView>
+                    </>
+                )}
+            </Main>
+        </MainWrapper>
+    );
 };
 
 export default LetterPage;
