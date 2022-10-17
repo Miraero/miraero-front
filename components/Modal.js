@@ -2,8 +2,9 @@ import styled from "@emotion/styled"; //css
 import { SmallWeek, SmallFill } from "../components/Atomic";
 import { useRef, useState } from "react"; //react hooks
 import { DropDown } from "../components/DropDown";
-
 import React from "react";
+import { userDataState } from "../store/atom";
+import { useRecoilState } from "recoil";
 
 const font_DATA = [
   { id: null, value: "글꼴을 선택하세요." },
@@ -22,7 +23,6 @@ const letter_DATA = [
 export const ModalContainer = styled.div`
   display: flex;
   flex-direction: column;
-  justifycontent: "space-between";
   height: auto;
 `;
 
@@ -87,8 +87,11 @@ export const ModalBtnContainer = styled.div`
   margin-top: 100px;
 `;
 
-export const Modal = () => {
+export const Modal = ({ title, content }) => {
   const [isOpen, setIsOpen] = useState(false);
+
+  const [userData, setUserData] = useRecoilState(userDataState);
+
   const openModalHandler = () => {
     return setIsOpen(!isOpen);
   };
@@ -112,12 +115,12 @@ export const Modal = () => {
             <ModalContainer>
               <LargeHeader>편지지 설정</LargeHeader>
               <SmallHeader>글꼴</SmallHeader>
-              <DropDown data={font_DATA}></DropDown>
+              <DropDown data={font_DATA} targetValue="font"></DropDown>
               <SmallHeader>편지지</SmallHeader>
-              <DropDown data={letter_DATA}></DropDown>
+              <DropDown data={letter_DATA} targetValue="letterType"></DropDown>
 
               <ModalBtnContainer>
-                <SmallWeek onClick={openModalHandler}>취소</SmallWeek>
+                <SmallWeek onClick={openModalHandler}>닫기</SmallWeek>
                 <SmallFill onClick={openModalHandler}>확인</SmallFill>
               </ModalBtnContainer>
             </ModalContainer>

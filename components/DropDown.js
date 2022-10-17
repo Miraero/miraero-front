@@ -1,5 +1,7 @@
 import styled from "@emotion/styled";
 import { useState } from "react";
+import { userDataState } from "../store/atom";
+import { useRecoilState } from "recoil";
 
 export const SelectContainer = styled.select`
   width: auto;
@@ -10,14 +12,19 @@ export const SelectContainer = styled.select`
   padding: 5px;
 `;
 
-export const DropDown = ({ data }) => {
-  const [selectedDropValue, setSelectedDropValue] =
-    useState("상품을 선택하세요.");
+export const DropDown = ({ data, targetValue }) => {
+  const [userData, setUserData] = useRecoilState(userDataState);
 
   const handleDropProduct = (e) => {
     const { value } = e.target;
+    let userTarget = targetValue;
     // 상품코드에 넣을 데이터
-    setSelectedDropValue(data.filter((el) => el.value === value)[0].id);
+    let temp = {
+      ...userData,
+      [userTarget]: data.filter((el) => el.value === value)[0].id,
+    };
+    // 상품코드에 넣을 데이터
+    setUserData(temp);
   };
   return (
     <>
