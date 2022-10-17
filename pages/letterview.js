@@ -34,7 +34,11 @@ const LetterPage = () => {
                 ) : (
                     <>
                         <MainTop>
-                            <DateText>{data.receiveDate}</DateText>
+                            <DateText>
+                                {data.receiveDatecreatedAt
+                                    .slice(0, 10)
+                                    .replace(/-/g, ".")}
+                            </DateText>
                             <LetterTitle>{data.title}</LetterTitle>
                         </MainTop>
                         <LetterView>{data.content}</LetterView>

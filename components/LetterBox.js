@@ -23,11 +23,15 @@ const LetterBox = ({ letter }) => {
                 <LetterTitle>{title}</LetterTitle>
                 <LetterToSection>
                     <LetterToTitle>To</LetterToTitle>
-                    <LetterToDate>{receiveDate}</LetterToDate>
+                    <LetterToDate>
+                        {receiveDate.slice(0, 10).replace(/-/g, ".")}
+                    </LetterToDate>
                 </LetterToSection>
                 <LetterFromSection>
                     <LetterFromTitle>From</LetterFromTitle>
-                    <LetterFromDate>{createdAt}</LetterFromDate>
+                    <LetterFromDate>
+                        {createdAt.slice(0, 10).replace(/-/g, ".")}
+                    </LetterFromDate>
                 </LetterFromSection>
             </LetterInfo>
         </LetterContainer>
