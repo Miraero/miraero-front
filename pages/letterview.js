@@ -35,7 +35,7 @@ const LetterPage = () => {
                     <>
                         <MainTop>
                             <DateText>
-                                {data.receiveDatecreatedAt
+                                {data.receiveDate
                                     .slice(0, 10)
                                     .replace(/-/g, ".")}
                             </DateText>

@@ -45,7 +45,7 @@ export const LargeButton = styled.button`
 `;
 
 export const SmallFill = styled.button`
-    width: 47%;
+    width: calc(50% - 10px);
     height: 56px;
     font-weight: 500;
     font-size: 18px;
@@ -63,7 +63,7 @@ export const SmallFill = styled.button`
 `;
 
 export const SmallWeek = styled.button`
-    width: 47%;
+    width: calc(50% - 10px);
     height: 56px;
     font-weight: 500;
     font-size: 18px;
