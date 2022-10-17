@@ -11,14 +11,15 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
+      
+      - name: 'Checkout Github Action'
+        uses: actions/checkout@main
+      
       - name: make .env
         run: |
           touch .env
           echo ${{ secrets.NEXT_PUBLIC_API_URI }} >> .env
       
-      - name: 'Checkout Github Action'
-        uses: actions/checkout@main
-
       - name: 'Login via Azure CLI'
         uses: azure/login@v1
         with:
