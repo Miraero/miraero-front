@@ -9,7 +9,7 @@ COPY package.json ./
 RUN npm install
 
 COPY . .
-COPY .env ./
+COPY .env /usr/src/app
 RUN npm run build
 
 EXPOSE 3000
