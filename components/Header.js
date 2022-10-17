@@ -9,7 +9,7 @@ const Header = () => {
     const handleClick = (e) => {
         e.preventDefault();
         if (router.asPath === "/write") {
-            if (userData.currentStep) router.push("/");
+            if (!userData.currentStep) router.push("/");
             else {
                 let temp = {
                     ...userData,
