@@ -8,16 +8,16 @@ import { useRecoilState } from "recoil";
 
 const font_DATA = [
   { id: null, value: "글꼴을 선택하세요." },
-  { id: "1", value: "잘난체" },
-  { id: "2", value: "객체" },
-  { id: "3", value: "잡채" },
+  { id: "1", value: "기본" },
+  { id: "2", value: "명조체" },
+  { id: "3", value: "고딕체" },
 ];
 
 const letter_DATA = [
   { id: null, value: "편지지를 선택하세요." },
-  { id: "1", value: "종이" },
-  { id: "2", value: "비행" },
-  { id: "3", value: "기" },
+  { id: "1", value: "기본" },
+  { id: "2", value: "한지" },
+  { id: "3", value: "구김" },
 ];
 
 export const ModalContainer = styled.div`
