@@ -5,7 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import client from "../lib/client";
 import { useEffect } from "react";
 
-const Inbox = () => {
+const LetterPage = () => {
     const router = useRouter();
 
     useEffect(() => {
@@ -34,7 +34,11 @@ const Inbox = () => {
                 ) : (
                     <>
                         <MainTop>
-                            <DateText>{data.receiveDate}</DateText>
+                            <DateText>
+                                {data.receiveDatecreatedAt
+                                    .slice(0, 10)
+                                    .replace(/-/g, ".")}
+                            </DateText>
                             <LetterTitle>{data.title}</LetterTitle>
                         </MainTop>
                         <LetterView>{data.content}</LetterView>
@@ -45,7 +49,7 @@ const Inbox = () => {
     );
 };
 
-export default Inbox;
+export default LetterPage;
 
 const MainWrapper = styled.div`
     box-sizing: border-box;
