@@ -2,15 +2,16 @@ import styled from "@emotion/styled";
 import Router, { useRouter } from "next/router";
 
 const LetterBox = ({ letter }) => {
-    const { title, recieveDate, from, isRead, id } = letter;
-    const url = isRead ? "asset/openletter.png" : "asset/letter.png";
+    const { title, receiveDate, createdAt, isRead, lastReadDate, id } = letter;
+    const url =
+        lastReadDate === null ? "asset/openletter.png" : "asset/letter.png";
     const router = useRouter();
     const handleClick = (e, id) => {
         e.preventDefault();
         router.push({
             pathname: "inbox",
             query: {
-                letterId: id,
+                letterId: `${id}`,
             },
         });
     };
@@ -22,11 +23,11 @@ const LetterBox = ({ letter }) => {
                 <LetterTitle>{title}</LetterTitle>
                 <LetterToSection>
                     <LetterToTitle>To</LetterToTitle>
-                    <LetterToDate>{recieveDate}</LetterToDate>
+                    <LetterToDate>{receiveDate}</LetterToDate>
                 </LetterToSection>
                 <LetterFromSection>
                     <LetterFromTitle>From</LetterFromTitle>
-                    <LetterFromDate>{from}</LetterFromDate>
+                    <LetterFromDate>{createdAt}</LetterFromDate>
                 </LetterFromSection>
             </LetterInfo>
         </LetterContainer>

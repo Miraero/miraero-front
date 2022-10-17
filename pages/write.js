@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Header from "../components/Header";
 import {
     DateText,
@@ -71,6 +71,15 @@ const DateInput = styled.input`
 `;
 
 const Write = () => {
+    useEffect(() => {
+        if (!localStorage.getItem("accessToken")) {
+            router.push("/login");
+        }
+
+        client.defaults.headers[
+            "Authorization"
+        ] = `Bearer ${localStorage.getItem("accessToken")}`;
+    }, []);
     const router = useRouter();
     let [inputTitle, setInputTitle] = useState("");
     let [inputContent, setInputContent] = useState("");
@@ -110,9 +119,7 @@ const Write = () => {
             .post("/api/letter", {
                 title: inputTitle,
                 content: inputContent,
-                font: userData.font,
-                letterType: userData.letterType,
-                receiveDate: inputDate,
+                receiveDate: `${inputDate}T00:00:00`,
             })
             .then((res) => {
                 console.log(res);

@@ -3,9 +3,19 @@ import { useRouter } from "next/router";
 import Header from "../components/Header";
 import { useQuery } from "@tanstack/react-query";
 import client from "../lib/client";
+import { useEffect } from "react";
 
 const Inbox = () => {
     const router = useRouter();
+
+    useEffect(() => {
+        if (!localStorage.getItem("accessToken")) {
+            router.push("/login");
+        }
+        client.defaults.headers[
+            "Authorization"
+        ] = `Bearer ${localStorage.getItem("accessToken")}`;
+    }, []);
 
     const getLetter = async () => {
         const { data } = await client.get(
@@ -14,18 +24,22 @@ const Inbox = () => {
         return data;
     };
 
-    const { data: letter } = useQuery(["letter"], getLetter, {
-        refetchInterval: 500,
-    });
+    const { data, isLoading } = useQuery(["letter"], getLetter, {});
     return (
         <MainWrapper>
             <Header />
             <Main>
-                <MainTop>
-                    <DateText>{data.receiveDate}</DateText>
-                    <LetterTitle>{data.title}</LetterTitle>
-                </MainTop>
-                <LetterView>{data.content}</LetterView>
+                {isLoading ? (
+                    <div>로딩중</div>
+                ) : (
+                    <>
+                        <MainTop>
+                            <DateText>{data.receiveDate}</DateText>
+                            <LetterTitle>{data.title}</LetterTitle>
+                        </MainTop>
+                        <LetterView>{data.content}</LetterView>
+                    </>
+                )}
             </Main>
         </MainWrapper>
     );
