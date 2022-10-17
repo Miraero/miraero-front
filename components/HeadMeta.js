@@ -5,7 +5,7 @@ const HeadMeta = ({ title }) => {
     <Head>
       <title>{title || "미래로 보내는 편지"}</title>
       <meta
-        name="description"
+        property="og:description"
         content="미래의 당신에게 전할 이야기가 있나요?"
       />
       <meta name="viewport" content="initial-scale=1.0, width=device-width" />
