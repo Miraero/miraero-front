@@ -45,7 +45,7 @@ const InputContent = styled.textarea`
 `;
 const WriteTop = styled.div`
     display: "flex";
-    flexdirection: "column";
+    flex-direction: "column";
 `;
 
 const BtnContainer = styled.div`
@@ -55,22 +55,48 @@ const BtnContainer = styled.div`
 `;
 
 const SecondStepHeader = styled.div`
-    font-size: 32px;
-    margin-bottom: 100px;
+    font-weight: 600;
+    font-size: 27px;
+    line-height: 35px;
+`;
+
+const DateContainer = styled.div`
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    margin-top: 40px;
+`;
+
+const DateItem = styled.div`
+    display: flex;
+    gap: 12px;
+    align-items: center;
+`;
+
+const DateLabel = styled.div`
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 16px;
 `;
 
 const DateInput = styled.input`
-    width: 100%;
+    width: 80px;
     height: 50px;
     border: none;
     outline: none;
     border-bottom: 1px solid var(--gray02);
     font-size: 24px;
-    margin-bottom: 675px;
     cursor: pointer;
 `;
 
+const SecondContainerTwo = styled.div`
+    gap: 15px;
+    display: flex;
+    flex-direction: column;
+`;
+
 const Write = () => {
+    const date = new Date();
     useEffect(() => {
         if (!localStorage.getItem("accessToken")) {
             router.push("/login");
@@ -81,9 +107,22 @@ const Write = () => {
         ] = `Bearer ${localStorage.getItem("accessToken")}`;
     }, []);
     const router = useRouter();
+    const [year, setYear] = useState(date.getFullYear());
+    const [month, setMonth] = useState(date.getMonth() + 1);
+    const [day, setDay] = useState(date.getDate());
     let [inputTitle, setInputTitle] = useState("");
     let [inputContent, setInputContent] = useState("");
     let [inputDate, setInputDate] = useState("");
+
+    const handleYear = (e) => {
+        setYear(e.target.value);
+    };
+    const handleMonth = (e) => {
+        setMonth(e.target.value);
+    };
+    const handleDay = (e) => {
+        setDay(e.target.value);
+    };
 
     const [userData, setUserData] = useRecoilState(userDataState);
 
@@ -110,8 +149,15 @@ const Write = () => {
     };
 
     const handleSubmit = () => {
-        if (inputDate === "") {
+        if (year === "" || month === "" || day === "") {
             alert("모든 항목을 입력해주세요.");
+            return;
+        }
+        if (
+            new Date(date.getFullYear(), date.getMonth() + 1, date.getDate()) >=
+            new Date(year, month, day)
+        ) {
+            alert("오늘 이후의 날짜를 입력해주세요.");
             return;
         }
 
@@ -119,7 +165,9 @@ const Write = () => {
             .post("/api/letter", {
                 title: inputTitle,
                 content: inputContent,
-                receiveDate: `${inputDate}T00:00:00`,
+                receiveDate: `${year}-${month}-${day}T00:00`,
+                font: userData.font,
+                letterType: userData.letterType,
             })
             .then((res) => {
                 console.log(res);
@@ -132,14 +180,21 @@ const Write = () => {
     };
 
     return (
-        <PageWrapper>
+        <PageWrapper
+            style={{
+                justifyContent: "space-between",
+            }}
+        >
             <Header />
 
             {!userData.currentStep ? (
                 <>
                     <Contents>
                         <WriteTop>
-                            <DateText>2022.10.16</DateText>
+                            <DateText>
+                                {date.getFullYear()}.{date.getMonth() + 1}.
+                                {date.getDate()}
+                            </DateText>
 
                             <InputTitle
                                 type="text"
@@ -167,14 +222,41 @@ const Write = () => {
                             display: "flex",
                             flexDirection: "column",
                             justifyContent: "space-between",
+                            minHeight: "100vh",
                         }}
                     >
-                        <SecondStepHeader>받는 날짜 설정</SecondStepHeader>
-                        <DateInput
-                            type="date"
-                            value={inputDate}
-                            onChange={handleDateInput}
-                        />
+                        <SecondContainerTwo>
+                            <SecondStepHeader>
+                                언제 편지를 <br />
+                                받으실 건가요?
+                            </SecondStepHeader>
+                            <DateContainer>
+                                <DateItem>
+                                    <DateInput
+                                        type="number"
+                                        value={year}
+                                        onChange={handleYear}
+                                    />
+                                    <DateLabel>년</DateLabel>
+                                </DateItem>
+                                <DateItem>
+                                    <DateInput
+                                        type="number"
+                                        value={month}
+                                        onChange={handleMonth}
+                                    />
+                                    <DateLabel>월</DateLabel>
+                                </DateItem>
+                                <DateItem>
+                                    <DateInput
+                                        type="number"
+                                        value={day}
+                                        onChange={handleDay}
+                                    />
+                                    <DateLabel>일</DateLabel>
+                                </DateItem>
+                            </DateContainer>
+                        </SecondContainerTwo>
                         <LargeButton onClick={handleSubmit}>완료</LargeButton>
                     </Contents>
                 </>

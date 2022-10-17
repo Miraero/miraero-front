@@ -11,8 +11,12 @@ import LetterBox from "../components/LetterBox";
 import { useQuery } from "@tanstack/react-query";
 import client from "../lib/client";
 import { useRouter } from "next/router";
+import { userDataState } from "../store/atom";
+import { useRecoilState } from "recoil";
 
 const Home = () => {
+    const [userData, setUserData] = useRecoilState(userDataState);
+    const date = new Date();
     const router = useRouter();
 
     const [name, setName] = useState("");
@@ -28,6 +32,11 @@ const Home = () => {
 
     const handleWrite = (e) => {
         e.preventDefault();
+        let temp = {
+            ...userData,
+            currentStep: false,
+        };
+        setUserData(temp);
         router.push("/write");
     };
 
@@ -51,7 +60,11 @@ const Home = () => {
                         gap: "3px",
                     }}
                 >
-                    <DateText>2022.10.03</DateText>
+                    <DateText>
+                        {" "}
+                        {date.getFullYear()}.{date.getMonth() + 1}.
+                        {date.getDate()}
+                    </DateText>
                     <Welcome>{name}님 안녕하세요.</Welcome>
                 </VerticalLeft>
                 <SectionTitle>받은 편지함</SectionTitle>
