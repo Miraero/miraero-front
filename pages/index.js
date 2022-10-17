@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from "react";
 import {
-    PageWrapper,
-    VerticalLeft,
-    DateText,
-    Welcome,
-    LargeButton,
+  PageWrapper,
+  VerticalLeft,
+  DateText,
+  Welcome,
+  LargeButton,
 } from "../components/Atomic";
 import styled from "@emotion/styled";
 import LetterBox from "../components/LetterBox";
 import { useQuery } from "@tanstack/react-query";
 import client from "../lib/client";
 import { useRouter } from "next/router";
+import HeadMeta from "../components/HeadMeta";
 import { userDataState } from "../store/atom";
 import { useRecoilState } from "recoil";
 
@@ -19,16 +20,17 @@ const Home = () => {
     const date = new Date();
     const router = useRouter();
 
-    const [name, setName] = useState("");
-    useEffect(() => {
-        if (!localStorage.getItem("accessToken")) {
-            router.push("/login");
-        }
-        client.defaults.headers[
-            "Authorization"
-        ] = `Bearer ${localStorage.getItem("accessToken")}`;
-        setName(localStorage.getItem("name"));
-    }, []);
+  const [name, setName] = useState("");
+  useEffect(() => {
+    if (!localStorage.getItem("accessToken")) {
+      router.push("/login");
+    }
+    client.defaults.headers["Authorization"] = `Bearer ${localStorage.getItem(
+      "accessToken"
+    )}`;
+    setName(localStorage.getItem("name"));
+  }, []);
+
 
     const handleWrite = (e) => {
         e.preventDefault();
@@ -40,18 +42,21 @@ const Home = () => {
         router.push("/write");
     };
 
-    const getLetters = async () => {
-        const { data } = await client.get("/api/letters");
-        return data.letters;
-    };
+  const getLetters = async () => {
+    const { data } = await client.get("/api/letters");
+    return data.letters;
+  };
 
-    const { data: letters, isLoading } = useQuery(["letters"], getLetters, {});
+  const { data: letters, isLoading } = useQuery(["letters"], getLetters, {});
 
-    return (
-        <PageWrapper
-            style={{
-                justifyContent: "space-between",
-            }}
+  return (
+    <>
+      <HeadMeta />
+      <PageWrapper
+        style={{
+          justifyContent: "space-between",
+        }}
+ 
         >
             <PageTop>
                 <VerticalLeft
@@ -115,43 +120,43 @@ const Home = () => {
 };
 
 const PageEnd = styled.div`
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 `;
 
 const PageTop = styled.div`
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    height: auto;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: auto;
 `;
 
 const LetterView = styled.div`
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    max-height: calc(100vh - 330px);
-    overflow: scroll;
-    margin-top: 20px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 330px);
+  overflow: scroll;
+  margin-top: 20px;
 `;
 
 const NoLetter = styled.div`
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: calc(100vh - 360px);
-    font-size: 16px;
-    color: var(--gray02);
-    text-align: center;
-    line-height: 23px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - 360px);
+  font-size: 16px;
+  color: var(--gray02);
+  text-align: center;
+  line-height: 23px;
 `;
 const SectionTitle = styled.div`
-    margin-top: 38px;
-    font-weight: 500;
-    font-size: 16px;
-    color: var(--textColor);
+  margin-top: 38px;
+  font-weight: 500;
+  font-size: 16px;
+  color: var(--textColor);
 `;
 
 export default Home;

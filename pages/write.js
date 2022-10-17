@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import Header from "../components/Header";
 import {
-    DateText,
-    SmallFill,
-    PageWrapper,
-    LargeButton,
+  DateText,
+  SmallFill,
+  PageWrapper,
+  LargeButton,
 } from "../components/Atomic";
 import { Modal } from "../components/Modal";
 import styled from "@emotion/styled";
@@ -12,46 +12,49 @@ import { userDataState } from "../store/atom";
 import { useRecoilState } from "recoil";
 import client from "../lib/client";
 import { useRouter } from "next/router";
+import HeadMeta from "../components/HeadMeta";
 
 const Contents = styled.div`
-    margin-top: 102px;
+  margin-top: 102px;
 `;
 
 const InputTitle = styled.input`
-    padding: 10px 0px;
-    margin: 10px 0px;
-    border: none;
-    font-size: 24px;
-    border-bottom: 1px solid var(--gray02);
-    width: 100%;
-    outline: none;
-    cursor: pointer;
-    transition: all 0.2s ease-in-out;
-    &:focus {
-        border-bottom: 1px solid black;
-    }
+  padding: 10px 0px;
+  margin: 10px 0px;
+  border: none;
+  font-size: 24px;
+  border-bottom: 1px solid var(--gray02);
+  width: 100%;
+  outline: none;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  &:focus {
+    border-bottom: 1px solid black;
+  }
 `;
 
 const InputContent = styled.textarea`
-    height: 60vh;
-    border: none;
-    outline: none;
-    width: 100%;
-    resize: none;
-    cursor: pointer;
-    margin-top: 15px;
-    font-size: 16px;
-    line-height: 30px;
+  height: 60vh;
+  border: none;
+  outline: none;
+  width: 100%;
+  resize: none;
+  cursor: pointer;
+  margin-top: 15px;
+  font-size: 16px;
+  line-height: 30px;
 `;
 const WriteTop = styled.div`
+
     display: "flex";
     flex-direction: "column";
+
 `;
 
 const BtnContainer = styled.div`
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 `;
 
 const SecondStepHeader = styled.div`
@@ -96,6 +99,7 @@ const SecondContainerTwo = styled.div`
 `;
 
 const Write = () => {
+    const router = useRouter();
     const date = new Date();
     useEffect(() => {
         if (!localStorage.getItem("accessToken")) {
@@ -106,7 +110,7 @@ const Write = () => {
             "Authorization"
         ] = `Bearer ${localStorage.getItem("accessToken")}`;
     }, []);
-    const router = useRouter();
+
     const [year, setYear] = useState(date.getFullYear());
     const [month, setMonth] = useState(date.getMonth() + 1);
     const [day, setDay] = useState(date.getDate());
@@ -136,17 +140,38 @@ const Write = () => {
         setInputDate(e.target.value);
     };
 
-    const handleNextStep = () => {
-        if (inputTitle === "" || inputContent === "") {
-            alert("모든 항목을 입력해주세요.");
-            return;
-        }
-        let temp = {
-            ...userData,
-            currentStep: true,
-        };
-        setUserData(temp);
+    client.defaults.headers["Authorization"] = `Bearer ${localStorage.getItem(
+      "accessToken"
+    )}`;
+  }, []);
+  const router = useRouter();
+  let [inputTitle, setInputTitle] = useState("");
+  let [inputContent, setInputContent] = useState("");
+  let [inputDate, setInputDate] = useState("");
+
+  const [userData, setUserData] = useRecoilState(userDataState);
+
+  const handleTitleInput = (e) => {
+    setInputTitle(e.target.value);
+  };
+  const handleContentInput = (e) => {
+    setInputContent(e.target.value);
+  };
+  const handleDateInput = (e) => {
+    setInputDate(e.target.value);
+  };
+
+  const handleNextStep = () => {
+    if (inputTitle === "" || inputContent === "") {
+      alert("모든 항목을 입력해주세요.");
+      return;
+    }
+    let temp = {
+      ...userData,
+      currentStep: true,
     };
+    setUserData(temp);
+  };
 
     const handleSubmit = () => {
         if (year === "" || month === "" || day === "") {
@@ -179,8 +204,26 @@ const Write = () => {
         console.log("submit");
     };
 
-    return (
-        <PageWrapper
+    client
+      .post("/api/letter", {
+        title: inputTitle,
+        content: inputContent,
+        receiveDate: `${inputDate}T00:00:00`,
+      })
+      .then((res) => {
+        console.log(res);
+        router.push("/");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    console.log("submit");
+  };
+
+  return (
+    <>
+      <HeadMeta title="편지쓰기" />
+           <PageWrapper
             style={{
                 justifyContent: "space-between",
             }}
@@ -262,6 +305,7 @@ const Write = () => {
                 </>
             )}
         </PageWrapper>
+        </>
     );
 };
 
